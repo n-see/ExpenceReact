@@ -11,6 +11,10 @@ interface ExpenseProps {
 }
 
 const ExpenseList = ({expenses, onDelete}:ExpenseProps) => {
+
+    if(expenses.length === 0)
+        return null;
+    
     return (
         <>
             <table className="table table-dark table-bordered">
