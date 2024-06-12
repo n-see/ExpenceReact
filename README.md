@@ -9,5 +9,5 @@ Mini Challenge 10
 
 4. Make sure to push to github multiple times each day.
 
-Peer reviewed by:
-Comments:
+Peer reviewed by: Jerie
+Comments: Everything looks good and works. 
