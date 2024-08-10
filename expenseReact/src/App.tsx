@@ -56,7 +56,7 @@ const App = () => {
       <ExpenseFilter onSelectCategory={(category) => setSelectedCategory(category)}/>
       </div>
       <div className="m-5">
-      <ExpenseList expenses={visibleExpense} onDelete={handleDelete}/>
+      <ExpenseList />
       </div>
     </>
   )

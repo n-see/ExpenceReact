@@ -1,3 +1,7 @@
+import axios from "axios";
+import { useEffect, useState } from "react";
+import { BASE_URL } from "../../constant";
+
 interface Expense {
     id: number;
     description: string;
@@ -5,16 +9,45 @@ interface Expense {
     category: string;
 }
 
-interface ExpenseProps {
-    expenses: Expense [];
-    onDelete: (id: number) => void
-}
+// interface ExpenseProps {
+//     expenses: Expense [];
+//     onDelete: (id: number) => void
+// }
 
-const ExpenseList = ({expenses, onDelete}:ExpenseProps) => {
+const ExpenseList = () => {
 
-    if(expenses.length === 0)
-        return null;
+    const [data, setData] = useState<Expense[]>([]);
+    const [currentData, setCurrentData] = useState<Expense>({} as Expense);
+
     
+
+    const fetchData = () => {
+        axios
+            .get(BASE_URL + "Expense/")
+            .then((response) => {
+                setData(response.data);
+            })
+            .catch((error) => {
+                console.log(error);
+            })
+    }
+
+    const handleDelete = (id: number) => {
+        axios
+            .delete(BASE_URL + "Expense/" + id)
+            .then(() =>
+                fetchData()
+            )
+            .catch((error) => {
+                console.log(error);
+            })
+    }
+
+    useEffect(() => {
+        fetchData();
+    }, [])
+
+
     return (
         <>
             <table className="table table-dark table-bordered">
@@ -27,13 +60,13 @@ const ExpenseList = ({expenses, onDelete}:ExpenseProps) => {
                     </tr>
                 </thead>
                 <tbody>
-                    {expenses.map(expense => <tr key={expense.id}> 
-                    <td>{expense.description}</td>
-                    <td>{expense.amount}</td>
-                    <td>{expense.category}</td>
-                    <td>
-                        <button className="btn btn-outline-danger" onClick={()=> onDelete(expense.id)}>Delete</button>
-                    </td>
+                    {data.map(expense => <tr key={expense.id}>
+                        <td>{expense.description}</td>
+                        <td>{expense.amount}</td>
+                        <td>{expense.category}</td>
+                        <td>
+                            <button className="btn btn-outline-danger" onClick={() => handleDelete(expense.id)}>Delete</button>
+                        </td>
 
                     </tr>)}
                 </tbody>
@@ -41,7 +74,7 @@ const ExpenseList = ({expenses, onDelete}:ExpenseProps) => {
                 <tfoot>
                     <tr>
                         <td>Total</td>
-                        <td>{expenses.reduce((acc, expense)=> expense.amount + acc,0).toFixed(2)}</td>
+                        <td>{data.reduce((acc, expense) => expense.amount + acc, 0).toFixed(2)}</td>
                         <td></td>
                         <td></td>
                     </tr>
