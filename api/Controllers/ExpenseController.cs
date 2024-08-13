@@ -43,6 +43,27 @@ namespace api.Controllers
             return BadRequest();
         }
 
+        [HttpPut("{id:int}")]
+
+        public async Task<IActionResult> EditExpense(int id, Expense expense){
+            var expenseFromDb = await _context.Expenses.FindAsync(id);
+
+            if(expenseFromDb == null){
+                return BadRequest();
+            }
+
+            expenseFromDb.Description = expense.Description;
+            expenseFromDb.Amount = expense.Amount;
+            expenseFromDb.Category = expense.Category;
+
+            var result = await _context.SaveChangesAsync();
+
+            if(result > 0){
+                return Ok("Edit Successful");
+            }
+            return BadRequest("Unable to edit");
+        }
+
         [HttpDelete("{id:int}")]
 
         public async Task<IActionResult> Delete(int id){

@@ -1,12 +1,20 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { BASE_URL } from "../../constant";
+import { useToast } from "@chakra-ui/react";
+import ExpenseForm from "./ExpenseForm";
 
-interface Expense {
+export interface Expense {
     id: number;
     description: string;
     amount: number;
     category: string;
+}
+
+
+
+export interface ExpenseProps{
+    fetchData: () => void;
 }
 
 // interface ExpenseProps {
@@ -18,8 +26,8 @@ const ExpenseList = () => {
 
     const [data, setData] = useState<Expense[]>([]);
     const [currentData, setCurrentData] = useState<Expense>({} as Expense);
+ 
 
-    
 
     const fetchData = () => {
         axios
@@ -43,6 +51,18 @@ const ExpenseList = () => {
             })
     }
 
+    const handleUpdate = (id: number) => {
+        axios
+      .get(BASE_URL + "Expense/" + id)
+      .then((res) => {
+        setCurrentData(res.data);
+
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+    }
+
     useEffect(() => {
         fetchData();
     }, [])
@@ -50,6 +70,7 @@ const ExpenseList = () => {
 
     return (
         <>
+            <ExpenseForm fetchData={fetchData}/>
             <table className="table table-dark table-bordered">
                 <thead>
                     <tr>
@@ -66,6 +87,7 @@ const ExpenseList = () => {
                         <td>{expense.category}</td>
                         <td>
                             <button className="btn btn-outline-danger" onClick={() => handleDelete(expense.id)}>Delete</button>
+                            <button className="btn btn-outline-warning " onClick={() => handleUpdate(expense.id)}>Edit</button>
                         </td>
 
                     </tr>)}
@@ -80,6 +102,7 @@ const ExpenseList = () => {
                     </tr>
                 </tfoot>
             </table>
+            
         </>
     );
 };

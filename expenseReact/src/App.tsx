@@ -50,13 +50,13 @@ const App = () => {
     <>
       <h1 className="text-center">Expense Tracker</h1>
       <div className="m-5">
-      <ExpenseForm expenseClick={expense => setDummyExpensesArray([...dummyExpensesArray, {...expense, id: dummyExpensesArray.length + 1}])}/>
+      {/* <ExpenseForm/> */}
       </div>
       <div className='m-5'>
       <ExpenseFilter onSelectCategory={(category) => setSelectedCategory(category)}/>
       </div>
       <div className="m-5">
-      <ExpenseList />
+      <ExpenseList expenses={visibleExpense} onDelete={handleDelete}/>
       </div>
     </>
   )
