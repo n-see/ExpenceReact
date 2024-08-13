@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { BASE_URL } from "../../constant";
 import { useToast } from "@chakra-ui/react";
 import ExpenseForm from "./ExpenseForm";
+import categories from "../categories";
 
 export interface Expense {
     id: number;
@@ -13,7 +14,7 @@ export interface Expense {
 
 
 
-export interface ExpenseProps{
+export interface ExpenseProps {
     fetchData: () => void;
 }
 
@@ -26,8 +27,34 @@ const ExpenseList = () => {
 
     const [data, setData] = useState<Expense[]>([]);
     const [currentData, setCurrentData] = useState<Expense>({} as Expense);
- 
 
+    const [editInput, setEditInput] = useState<Expense>({
+        id: 0,
+        description: "",
+        amount: 0,
+        category: "",
+    })
+    const [editId, setEditId] = useState<number | null>(null);
+
+    const setEdit = (id: number) => {
+        setEditId(id)
+    }
+
+    const handleSave = () => {
+        axios
+            .put(BASE_URL + "Expense/" + editId, editInput)
+            .then(() => {
+                fetchData();
+                
+            })
+            .catch((error) => {
+                console.log(error);
+            })
+            .finally(()=>{
+                setEditInput({ ...editInput, id: 0, description: "", amount: 0, category: "" })
+                setEditId(null);
+            })
+    }
 
     const fetchData = () => {
         axios
@@ -51,17 +78,17 @@ const ExpenseList = () => {
             })
     }
 
-    const handleUpdate = (id: number) => {
-        axios
-      .get(BASE_URL + "Expense/" + id)
-      .then((res) => {
-        setCurrentData(res.data);
+    // const handleUpdate = (id: number) => {
+    //     axios
+    //         .get(BASE_URL + "Expense/" + id)
+    //         .then((res) => {
+    //             setCurrentData(res.data);
 
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-    }
+    //         })
+    //         .catch((error) => {
+    //             console.log(error);
+    //         });
+    // }
 
     useEffect(() => {
         fetchData();
@@ -70,7 +97,7 @@ const ExpenseList = () => {
 
     return (
         <>
-            <ExpenseForm fetchData={fetchData}/>
+            <ExpenseForm fetchData={fetchData} />
             <table className="table table-dark table-bordered">
                 <thead>
                     <tr>
@@ -82,12 +109,27 @@ const ExpenseList = () => {
                 </thead>
                 <tbody>
                     {data.map(expense => <tr key={expense.id}>
-                        <td>{expense.description}</td>
-                        <td>{expense.amount}</td>
-                        <td>{expense.category}</td>
+                        <td>
+                            {editId == expense.id ? (<>
+                                <input type="text" value={editInput.description} onChange={(e) => setEditInput({ ...editInput, description: e.target.value })} />
+                            </>) : expense.description}
+                        </td>
+                        <td>{editId == expense.id ? (<>
+                            <input type="text" value={editInput.amount} onChange={(e) => setEditInput({ ...editInput, amount: Number(e.target.value) })} />
+                        </>) : expense.amount}</td>
+                        <td>{editId == expense.id ? (<>
+                            <select id='category' className="form-select" onChange={(e) => setEditInput({ ...expense, category: e.target.value })}>
+                                <option value="">Select a Category</option>
+                                {categories.map(category => <option key={category} value={category}>{category}</option>)}
+                            </select>
+                        </>) : expense.category}</td>
                         <td>
                             <button className="btn btn-outline-danger" onClick={() => handleDelete(expense.id)}>Delete</button>
-                            <button className="btn btn-outline-warning " onClick={() => handleUpdate(expense.id)}>Edit</button>
+                            <button className="btn btn-outline-warning " onClick={() => setEdit(expense.id)}>Edit</button>
+                            {editId == expense.id ? (<>
+                                <button className="btn btn-outline-success" onClick={() => handleSave()}>Save Changes</button>
+                                <button className="btn btn-outline-warning" onClick={() => setEditId(null)}>Cancel Edit</button>
+                            </>) : null}
                         </td>
 
                     </tr>)}
@@ -102,7 +144,7 @@ const ExpenseList = () => {
                     </tr>
                 </tfoot>
             </table>
-            
+
         </>
     );
 };
