@@ -19,7 +19,7 @@ interface expenseProps {
     
 }
 
-const ExpenseForm = ({fetchData}:ExpenseProps) => {
+const ExpenseForm = ({fetchData}:ExpenseProps, {expenseClick}:expenseProps) => {
     const {register, handleSubmit,  formState:{errors}} = useForm<FormData>({resolver:zodResolver(schema)})
 
     const [expense, setExpense] = useState({
@@ -31,6 +31,7 @@ const ExpenseForm = ({fetchData}:ExpenseProps) => {
     console.log(errors)
 
     const handleAdd = () => {
+        if (expense.description === "" || expense.amount === 0 || expense.category ===""){return} else{
         axios
         .post(BASE_URL + "Expense/", expense)
         .then((response) => {
@@ -41,12 +42,13 @@ const ExpenseForm = ({fetchData}:ExpenseProps) => {
             console.log(error);
         })
     }
+    }
 
     
     
     return (
         <>
-            <form>
+            <form onSubmit={handleSubmit(expenseClick)}>
                 <div className="mb-3">
                     <label htmlFor="description" className="form-label">Description</label>
                     <input {...register('description')} id='description' type="text" className="form-control" onChange={(e)=> setExpense({...expense, description: e.target.value })}/>
