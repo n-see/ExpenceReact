@@ -4,6 +4,7 @@ import { BASE_URL } from "../../constant";
 
 import ExpenseForm from "./ExpenseForm";
 import categories from "../categories";
+import ExpenseFilter from "./ExpenseFilter";
 
 export interface Expense {
     id: number;
@@ -23,7 +24,11 @@ export interface ExpenseProps {
 
 const ExpenseList = () => {
     const [data, setData] = useState<Expense[]>([]);
-    const [currentData, setCurrentData] = useState<Expense>({} as Expense);
+    // const [currentData, setCurrentData] = useState<Expense>({} as Expense);
+    const [selectedCategory, setSelectedCategory] = useState('')
+
+    const visibleExpense = selectedCategory ? data.filter(e => e.category === selectedCategory): data;
+
 
     const [editInput, setEditInput] = useState<Expense>({
         id: 0,
@@ -85,6 +90,8 @@ const ExpenseList = () => {
     return (
         <>
             <ExpenseForm fetchData={fetchData} />
+            <ExpenseFilter onSelectCategory={(category) => setSelectedCategory(category)}/>
+
             <table className="table table-dark table-bordered">
                 <thead>
                     <tr>
@@ -95,7 +102,7 @@ const ExpenseList = () => {
                     </tr>
                 </thead>
                 <tbody>
-                    {data.map((expense) => (
+                    {visibleExpense.map((expense) => (
                         <tr key={expense.id}>
                             <td>
                                 {editId == expense.id ? (
@@ -193,7 +200,7 @@ const ExpenseList = () => {
                     <tr>
                         <td>Total</td>
                         <td>
-                            {data
+                            {visibleExpense
                                 .reduce((acc, expense) => expense.amount + acc, 0)
                                 .toFixed(2)}
                         </td>
