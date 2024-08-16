@@ -16,7 +16,6 @@ type FormData = z.infer<typeof schema>
 
 interface expenseProps {
     expenseClick: () => void;
-    
 }
 
 const ExpenseForm = ({fetchData}:ExpenseProps, {expenseClick}:expenseProps) => {
@@ -44,8 +43,8 @@ const ExpenseForm = ({fetchData}:ExpenseProps, {expenseClick}:expenseProps) => {
     }
     }
 
-    
-    
+
+
     return (
         <>
             <form onSubmit={handleSubmit(expenseClick)}>
