@@ -90,7 +90,9 @@ const ExpenseList = () => {
     return (
         <>
             <ExpenseForm fetchData={fetchData} />
+            <br />
             <ExpenseFilter onSelectCategory={(category) => setSelectedCategory(category)}/>
+                <br />
 
             <table className="table table-dark table-bordered">
                 <thead>
@@ -164,7 +166,7 @@ const ExpenseList = () => {
                             </td>
                             <td>
                                 <button
-                                    className="btn btn-outline-danger"
+                                    className="btn btn-outline-danger m-2"
                                     onClick={() => handleDelete(expense.id)}
                                 >
                                     Delete
