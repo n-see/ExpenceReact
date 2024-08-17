@@ -27,7 +27,7 @@ const ExpenseList = () => {
     // const [currentData, setCurrentData] = useState<Expense>({} as Expense);
     const [selectedCategory, setSelectedCategory] = useState('')
 
-    const visibleExpense = selectedCategory ? data.filter(e => e.category === selectedCategory): data;
+    const visibleExpense = selectedCategory ? data.filter(e => e.category === selectedCategory) : data;
 
 
     const [editInput, setEditInput] = useState<Expense>({
@@ -91,8 +91,8 @@ const ExpenseList = () => {
         <>
             <ExpenseForm fetchData={fetchData} />
             <br />
-            <ExpenseFilter onSelectCategory={(category) => setSelectedCategory(category)}/>
-                <br />
+            <ExpenseFilter onSelectCategory={(category) => setSelectedCategory(category)} />
+            <br />
 
             <table className="table table-dark table-bordered">
                 <thead>
