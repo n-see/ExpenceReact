@@ -25,10 +25,11 @@ export interface ExpenseProps {
 const ExpenseList = () => {
     const [data, setData] = useState<Expense[]>([]);
     // const [currentData, setCurrentData] = useState<Expense>({} as Expense);
-    const [selectedCategory, setSelectedCategory] = useState('')
+    const [selectedCategory, setSelectedCategory] = useState("");
 
-    const visibleExpense = selectedCategory ? data.filter(e => e.category === selectedCategory) : data;
-
+    const visibleExpense = selectedCategory
+        ? data.filter((e) => e.category === selectedCategory)
+        : data;
 
     const [editInput, setEditInput] = useState<Expense>({
         id: 0,
@@ -91,7 +92,9 @@ const ExpenseList = () => {
         <>
             <ExpenseForm fetchData={fetchData} />
             <br />
-            <ExpenseFilter onSelectCategory={(category) => setSelectedCategory(category)} />
+            <ExpenseFilter
+                onSelectCategory={(category) => setSelectedCategory(category)}
+            />
             <br />
 
             <table className="table table-dark table-bordered">
@@ -180,7 +183,7 @@ const ExpenseList = () => {
                                 {editId == expense.id ? (
                                     <>
                                         <button
-                                            className="btn btn-outline-success"
+                                            className="btn btn-outline-success m-2"
                                             onClick={() => handleSave()}
                                         >
                                             Save Changes
