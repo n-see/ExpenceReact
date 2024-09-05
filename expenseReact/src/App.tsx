@@ -1,5 +1,7 @@
 // import { useState } from "react"
+import CreateAccount from "./expense-tracker/components/CreateAccount";
 import ExpenseList from "./expense-tracker/components/ExpenseList"
+import {BrowserRouter, Routes, Route} from 'react-router-dom';
 // import ExpenseFilter from "./expense-tracker/components/ExpenseFilter"
 // import ExpenseForm from "./expense-tracker/components/ExpenseForm"
 // import categories from "./expense-tracker/categories";
@@ -47,6 +49,8 @@ const App = () => {
   //create a variable with a ternary operator we are going to use our selectedCategory as a boolean filter through our dummyExpenseArray
   return (
     <>
+    <BrowserRouter>
+        
       <h1 className="text-center">Expense Tracker</h1>
       <div className="m-5">
       {/* <ExpenseForm/> */}
@@ -55,8 +59,14 @@ const App = () => {
       {/* <ExpenseFilter onSelectCategory={(category) => setSelectedCategory(category)}/> */}
       </div>
       <div className="m-5">
-      <ExpenseList  />
+      {/* <ExpenseList  /> */}
+      <Routes>
+      <Route path="/" element={<ExpenseList/>} />
+      {/* <Route path="/Login" element={<Login />} /> */}
+      <Route path="/CreateAccount" element={<CreateAccount/>} />
+      </Routes>
       </div>
+    </BrowserRouter>
     </>
   )
 }

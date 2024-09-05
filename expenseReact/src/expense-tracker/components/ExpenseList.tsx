@@ -2,9 +2,11 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { BASE_URL } from "../../constant";
 
+
 import ExpenseForm from "./ExpenseForm";
 import categories from "../categories";
 import ExpenseFilter from "./ExpenseFilter";
+import Navbar from "./Navbar";
 
 export interface Expense {
     id: number;
@@ -89,7 +91,8 @@ const ExpenseList = () => {
     }, []);
 
     return (
-        <>
+        <>  
+            <Navbar/>
             <ExpenseForm fetchData={fetchData} />
             <br />
             <ExpenseFilter
