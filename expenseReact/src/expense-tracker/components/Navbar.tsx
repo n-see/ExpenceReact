@@ -13,9 +13,9 @@ const Navbar = () => {
     <>
         <Container>
             <Text>This is the navbar</Text>
-            {/* <Text as={Link} to={"/"}>Expense List</Text> */}
-            {/* <Text as={Link} to={"/CreateAccount"}>Create Account</Text> */}
-            {/* <Text as={Link} to={"/ExpenseList"}>Log In</Text> */}
+            <Text as={Link} to={"/ExpenseList"}>Expense List</Text>
+            <Text as={Link} to={"/CreateAccount"}>Create Account</Text>
+            <Text as={Link} to={"/"}>Log In</Text>
         </Container>
     </>
   )

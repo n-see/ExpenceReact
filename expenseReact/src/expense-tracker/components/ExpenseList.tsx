@@ -92,7 +92,7 @@ const ExpenseList = () => {
 
     return (
         <>  
-            <Navbar/>
+            
             <ExpenseForm fetchData={fetchData} />
             <br />
             <ExpenseFilter

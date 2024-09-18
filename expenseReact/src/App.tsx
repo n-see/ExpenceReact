@@ -2,6 +2,8 @@
 import CreateAccount from "./expense-tracker/components/CreateAccount";
 import ExpenseList from "./expense-tracker/components/ExpenseList"
 import {BrowserRouter, Routes, Route} from 'react-router-dom';
+import Navbar from "./expense-tracker/components/Navbar";
+import Login from "./expense-tracker/components/Login";
 // import ExpenseFilter from "./expense-tracker/components/ExpenseFilter"
 // import ExpenseForm from "./expense-tracker/components/ExpenseForm"
 // import categories from "./expense-tracker/categories";
@@ -13,6 +15,11 @@ import {BrowserRouter, Routes, Route} from 'react-router-dom';
 //   category: string;
 // }
 
+export interface User{
+  id: number,
+  username: string;
+  password: string;
+}
 
 const App = () => {
 
@@ -50,7 +57,7 @@ const App = () => {
   return (
     <>
     <BrowserRouter>
-        
+        <Navbar/>
       <h1 className="text-center">Expense Tracker</h1>
       <div className="m-5">
       {/* <ExpenseForm/> */}
@@ -61,9 +68,10 @@ const App = () => {
       <div className="m-5">
       {/* <ExpenseList  /> */}
       <Routes>
-      <Route path="/" element={<ExpenseList/>} />
+      <Route path="/ExpenseList" element={<ExpenseList/>} />
       {/* <Route path="/Login" element={<Login />} /> */}
       <Route path="/CreateAccount" element={<CreateAccount/>} />
+      <Route path="/" element={<Login/>} />
       </Routes>
       </div>
     </BrowserRouter>
