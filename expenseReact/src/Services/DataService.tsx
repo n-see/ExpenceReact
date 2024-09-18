@@ -23,8 +23,21 @@ const checkToken = () => {
 const createAccount = (createdUser:User) => {
     axios
     .post(BASE_URL + "User/AddUsers", createdUser )
-    .then(() => console.log("user successfully created"))
+    .then(res => res.data)
     .catch(error => error.message)
 };
+
+const login = (loginUser:User) => {
+    axios
+    .post(BASE_URL + "/User/Login", loginUser)
+    .then((res) => {
+
+        let data = res.data
+        localStorage.setItem("Token", data.token)
+    
+    }
+    )
+    .catch(error => error.message)
+}
 
 export {createAccount, checkToken}
