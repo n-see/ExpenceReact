@@ -28,7 +28,7 @@ const CreateAccount = () => {
         }
         console.log(userData)
         createAccount(userData)
-        navigate("/Login")
+        navigate("/")
     }
 
   return (

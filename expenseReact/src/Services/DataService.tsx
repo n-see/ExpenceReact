@@ -8,7 +8,7 @@ import { Container, Row, Col, Button, Form } from "react-bootstrap"
 
 let userData= {};
 if(localStorage.getItem("UserData")) {
-    userData = JSON.parse(localStorage.getUser("UserData") || "{}")}
+    userData = JSON.parse(localStorage.getItem("UserData") || "{}")}
 
 const checkToken = () => {
     let result = false;
@@ -26,17 +26,35 @@ const createAccount = (createdUser:User) => {
     .catch(error => error.message)
 };
 
-const login = (loginUser:User) => {
-    axios
-    .post(BASE_URL + "/User/Login", loginUser)
-    .then((res) => {
+const login = async (loginUser:User) => {
+    let outsideData = "";
 
+    try{
+        const res = await axios.post(BASE_URL + "User/Login", loginUser);
         let data = res.data
+        outsideData = data.token
         localStorage.setItem("Token", data.token)
-    
+        console.log(localStorage)
+        console.log(res);
+    } catch(error) {
+        console.log(error)
     }
-    )
-    .catch(error => error.message)
+
+    // .then((res) => {
+
+        // let data = res.data
+        // outsideData = data.token
+        // localStorage.setItem("Token", data.token)
+        // console.log(localStorage)
+    // }
+    // )
+    // .catch(error => error.message)
+    // .finally(() => {
+
+    //     console.log(outsideData)
+    // })
+    return outsideData
+    
 }
 
 const GetLoggedInUser = (username:string) => {
