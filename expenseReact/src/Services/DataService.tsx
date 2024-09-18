@@ -6,10 +6,10 @@ import { Container, Row, Col, Button, Form } from "react-bootstrap"
 
 //Helper function to check token
 
-// let userData= {};
-// if(localStorage.getItem("UserData")) {
-//     userData = JSON.parse(localStorage.getItem("UserData"));
-// }
+let userData= {};
+if(localStorage.getItem("UserData")) {
+    userData = JSON.parse(localStorage.getItem("UserData"));
+}
 
 const checkToken = () => {
     let result = false;
@@ -40,4 +40,21 @@ const login = (loginUser:User) => {
     .catch(error => error.message)
 }
 
-export {createAccount, checkToken}
+const GetLoggedInUser = (username:string) => {
+    axios
+    .get(BASE_URL + "User/GetUserByUsername/" + username)
+    .then((res) => {
+        let userData = res.data;
+        localStorage.setItem("UserData", userData)
+    })
+    .catch(error => error.message)
+}
+
+const LoggedInData = () => {
+    // if(!userData && localStorage.getItem("UserData")){
+    userData = JSON.parse(localStorage.getItem("UserData"));
+    // }
+    return userData;
+};
+
+export {createAccount, checkToken, login, GetLoggedInUser, LoggedInData}

@@ -1,6 +1,7 @@
 import { Container, Row, Col, Button, Form } from "react-bootstrap"
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom"
+import { GetLoggedInUser, login } from "../../Services/DataService";
 
 const Login = () => {
 
@@ -18,7 +19,19 @@ const Login = () => {
   }
 
   const handleSubmit = () => {
-      console.log("submit");
+    let userData = {
+      id: 0,
+      username: Username,
+      password: Password
+  }
+  console.log(userData)
+  let token = login(userData)
+  if(token.token != null){
+    localStorage.setItem("Token", token.token);
+    // localStorage.setItem("UserData", JSON.stringify(userData));
+    GetLoggedInUser(Username);
+    navigate('/ExpenseList')
+}
   }
 
     
