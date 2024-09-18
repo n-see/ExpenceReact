@@ -1,4 +1,4 @@
-import { json } from "react-router-dom";
+// import { json } from "react-router-dom";
 import { User } from "../App";
 import { BASE_URL } from "../constant";
 import axios from "axios";
@@ -8,8 +8,7 @@ import { Container, Row, Col, Button, Form } from "react-bootstrap"
 
 let userData= {};
 if(localStorage.getItem("UserData")) {
-    userData = JSON.parse(localStorage.getItem("UserData"));
-}
+    userData = JSON.parse(localStorage.getUser("UserData") || "{}")}
 
 const checkToken = () => {
     let result = false;
@@ -51,9 +50,9 @@ const GetLoggedInUser = (username:string) => {
 }
 
 const LoggedInData = () => {
-    // if(!userData && localStorage.getItem("UserData")){
-    userData = JSON.parse(localStorage.getItem("UserData"));
-    // }
+    if(!userData && localStorage.getItem("UserData")){
+        userData = JSON.parse(localStorage.getUser("UserData") || "{}")
+    }
     return userData;
 };
 
