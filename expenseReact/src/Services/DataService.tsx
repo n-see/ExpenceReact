@@ -8,7 +8,8 @@ import { Container, Row, Col, Button, Form } from "react-bootstrap"
 
 let userData= {};
 if(localStorage.getItem("UserData")) {
-    userData = JSON.parse(localStorage.getItem("UserData") || "{}")}
+    userData = JSON.parse(localStorage.getItem("UserData")!)
+}
 
 const checkToken = () => {
     let result = false;
@@ -62,6 +63,7 @@ const GetLoggedInUser = (username:string) => {
     .get(BASE_URL + "User/GetUserByUsername/" + username)
     .then((res) => {
         let userData = res.data;
+        console.log(userData)
         localStorage.setItem("UserData", userData)
     })
     .catch(error => error.message)
@@ -69,7 +71,7 @@ const GetLoggedInUser = (username:string) => {
 
 const LoggedInData = () => {
     if(!userData && localStorage.getItem("UserData")){
-        userData = JSON.parse(localStorage.getUser("UserData") || "{}")
+        userData = JSON.parse(localStorage.getUser("UserData")!)
     }
     return userData;
 };
