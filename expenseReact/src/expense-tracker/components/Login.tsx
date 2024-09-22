@@ -1,6 +1,6 @@
 import { Container, Row, Col, Button, Form } from "react-bootstrap"
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom"
+import { useNavigate } from "react-router-dom"
 import { GetLoggedInUser, login } from "../../Services/DataService";
 
 const Login = () => {

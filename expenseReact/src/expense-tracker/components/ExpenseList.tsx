@@ -7,16 +7,32 @@ import ExpenseForm from "./ExpenseForm";
 import categories from "../categories";
 import ExpenseFilter from "./ExpenseFilter";
 import Navbar from "./Navbar";
+import { useNavigate } from "react-router-dom";
+import { checkToken, GetItemsByUserId, LoggedInData } from "../../Services/DataService";
+import { User } from "../../App";
 
 export interface Expense {
     id: number;
+    userId: number;
     description: string;
     amount: number;
     category: string;
 }
 
+interface userInfo {
+    id: number
+    userId: number
+    publisherName: string
+
+}
+
+
 export interface ExpenseProps {
     fetchData: () => void;
+    userId: number
+}
+interface ExpenseProp {
+    onLogin: (userInfo:any) => void
 }
 
 // interface ExpenseProps {
@@ -24,7 +40,46 @@ export interface ExpenseProps {
 //     onDelete: (id: number) => void
 // }
 
-const ExpenseList = () => {
+const ExpenseList = ({onLogin}:ExpenseProp) => {
+    let navigate = useNavigate();
+
+    useEffect(() => {
+        if (!checkToken()) {
+            navigate('/')
+        }
+        else{
+            loadUserData();
+        }
+    }, [])
+
+    const [userId, setUserId] = useState(0);
+    const [publisherName, setPublisherName] = useState("")
+    const [expenseItem, setExpenseItem] = useState<Expense[]>([])
+    const [userInfo, setUserInfo] = useState<userInfo [] | null>(null)
+    
+
+    const loadUserData = () => {
+        let userInfos = LoggedInData();
+        // setUserInfo(userInfos)
+        onLogin(userInfo);
+        setUserId(JSON.parse(localStorage.getItem("UserData")!));
+        setPublisherName(userInfos.publisherName);
+        console.log("User info:", userInfos);
+        console.log(userInfos);
+        console.log(publisherName);
+        console.log(userId)
+        // setTimeout(async () => {
+            
+        //   let userExpenseItems = await GetItemsByUserId(userInfos.userId)
+        //   setExpenseItem(userExpenseItems.data);
+        //   setUserId(userId);
+
+
+        //   console.log("Loaded expense items: ", expenseItem);
+        // },1000)
+    
+    }
+    
     const [data, setData] = useState<Expense[]>([]);
     // const [currentData, setCurrentData] = useState<Expense>({} as Expense);
     const [selectedCategory, setSelectedCategory] = useState("");
@@ -35,6 +90,7 @@ const ExpenseList = () => {
 
     const [editInput, setEditInput] = useState<Expense>({
         id: 0,
+        userId: userId,
         description: "",
         amount: 0,
         category: "",
@@ -68,7 +124,7 @@ const ExpenseList = () => {
 
     const fetchData = () => {
         axios
-            .get(BASE_URL + "Expense/")
+            .get(BASE_URL + "Expense/GetItemsByUserId/" + userId)
             .then((response) => {
                 setData(response.data);
             })
@@ -93,7 +149,7 @@ const ExpenseList = () => {
     return (
         <>  
             
-            <ExpenseForm fetchData={fetchData} />
+            <ExpenseForm fetchData={fetchData} userId={userId}/>
             <br />
             <ExpenseFilter
                 onSelectCategory={(category) => setSelectedCategory(category)}

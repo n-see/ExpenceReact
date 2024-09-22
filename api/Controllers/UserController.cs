@@ -65,5 +65,9 @@ namespace api.Controllers
             return _data.DeleteUser(userToDelete);
         }
 
+        //Get user by userId
+
+     
+
     }
 }

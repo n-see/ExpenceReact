@@ -6,7 +6,11 @@ import { Container, Row, Col, Button, Form } from "react-bootstrap"
 
 //Helper function to check token
 
-let userData= {};
+let userData= {
+    id:0,
+    userId: 0,
+    publisherName: ""
+};
 if(localStorage.getItem("UserData")) {
     userData = JSON.parse(localStorage.getItem("UserData")!)
 }
@@ -35,7 +39,6 @@ const login = async (loginUser:User) => {
         let data = res.data
         outsideData = data.token
         localStorage.setItem("Token", data.token)
-        console.log(localStorage)
         console.log(res);
     } catch(error) {
         console.log(error)
@@ -64,7 +67,7 @@ const GetLoggedInUser = (username:string) => {
     .then((res) => {
         let userData = res.data;
         console.log(userData)
-        localStorage.setItem("UserData", userData)
+        localStorage.setItem("UserData", JSON.stringify(userData) )
     })
     .catch(error => error.message)
 }
@@ -76,4 +79,14 @@ const LoggedInData = () => {
     return userData;
 };
 
-export {createAccount, checkToken, login, GetLoggedInUser, LoggedInData}
+const GetItemsByUserId = (UserId: number) => {
+    let data;
+    axios
+    .get(BASE_URL + "Expense/GetItemsByUserId/" + UserId)
+    .then(res =>{ 
+        data = res.data})
+    .catch(error => error.message)
+        return data;
+}
+
+export {createAccount, checkToken, login, GetLoggedInUser, LoggedInData, GetItemsByUserId}

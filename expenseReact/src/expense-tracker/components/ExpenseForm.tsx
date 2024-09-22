@@ -18,16 +18,17 @@ interface expenseProps {
     expenseClick: () => void;
 }
 
-const ExpenseForm = ({fetchData}:ExpenseProps, {expenseClick}:expenseProps) => {
+const ExpenseForm = ({fetchData, userId}:ExpenseProps, {expenseClick}:expenseProps) => {
     const {register, handleSubmit,  formState:{errors}} = useForm<FormData>({resolver:zodResolver(schema)})
 
     const [expense, setExpense] = useState({
         id: 0,
+        userId: userId,
         description: "",
         amount:0,
         category:"",
         });
-    console.log(errors)
+    // console.log(errors)
 
     const handleAdd = () => {
         if (expense.description === "" || expense.amount === 0 || expense.category ===""){return} else{
