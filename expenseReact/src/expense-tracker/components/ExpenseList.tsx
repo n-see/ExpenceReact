@@ -55,17 +55,20 @@ const ExpenseList = ({onLogin}:ExpenseProp) => {
     const [userId, setUserId] = useState(0);
     const [publisherName, setPublisherName] = useState("")
     const [expenseItem, setExpenseItem] = useState<Expense[]>([])
-    const [userInfo, setUserInfo] = useState<userInfo [] | null>(null)
+    // const [userInfo, setUserInfo] = useState<userInfo [] | null>(null)
     
 
     const loadUserData = () => {
-        let userInfos = LoggedInData();
+        // let userInfos = LoggedInData();
+        let userInfo = JSON.parse(localStorage.getItem("UserData")!)
+        let userInfoId = Number(userInfo.userId);
+        console.log(userInfoId)
         // setUserInfo(userInfos)
+        console.log("User info:", userInfo);
         onLogin(userInfo);
-        setUserId(JSON.parse(localStorage.getItem("UserData")!));
-        setPublisherName(userInfos.publisherName);
-        console.log("User info:", userInfos);
-        console.log(userInfos);
+        setUserId(userInfoId);
+        setPublisherName(userInfo.publisherName);
+        console.log(userInfo.userId);
         console.log(publisherName);
         console.log(userId)
         // setTimeout(async () => {
