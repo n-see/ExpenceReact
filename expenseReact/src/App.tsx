@@ -55,23 +55,30 @@ const App = () => {
  
 
   //create a variable with a ternary operator we are going to use our selectedCategory as a boolean filter through our dummyExpenseArray
-  const[user, setUser] = useState<any>();
+  const[user, setUser] = useState({
+    publisherName: ""
+  });
+  const [publisherName, setPublisherName] = useState("")
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const handleLogin = (userData:string) => {
+  const handleLogin = (userData:{publisherName: string}) => {
     setUser(userData)
     setIsLoggedIn(true);
+    console.log(userData);
   }
   const handleLogout = () => {
     localStorage.clear();
-    setUser("");
+    setUser({
+      publisherName: ""
+    });
     setIsLoggedIn(false);
 }
+
 
   return (
     <>
     <BrowserRouter>
-        <Navbar isLoggedIn={isLoggedIn} setIsLoggedIn={() => setIsLoggedIn} user={user} handleLogout={handleLogout}/>
-      <h1 className="text-center">Expense Tracker</h1>
+    <Navbar isLoggedIn={isLoggedIn} setIsLoggedIn={() => setIsLoggedIn} user={user}  handleLogout={handleLogout}/>
+    <h1 className="text-center">Expense Tracker</h1>
       <div className="m-5">
       {/* <ExpenseForm/> */}
       </div>
