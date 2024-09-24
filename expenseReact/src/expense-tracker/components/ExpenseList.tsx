@@ -29,7 +29,7 @@ interface userInfo {
 
 export interface ExpenseProps {
     fetchData: () => void;
-    userId: number
+    
 }
 interface ExpenseProp {
     onLogin: (userInfo:any) => void
@@ -43,34 +43,39 @@ interface ExpenseProp {
 const ExpenseList = ({onLogin}:ExpenseProp) => {
     let navigate = useNavigate();
 
+
+    const [userId, setUserId] = useState(0);
+    const [publisherName, setPublisherName] = useState("")
+    const [expenseItem, setExpenseItem] = useState<Expense[]>([])
+
+    const [localS, setLocalS] = useState(() => {
+        return localStorage.getItem("UserData") ? JSON.parse(localStorage.getItem("UserData")!) : {userId: 0, publisherName: ""}
+        
+    })
+    // const [userInfo, setUserInfo] = useState<userInfo [] | null>(null)
+    
     useEffect(() => {
         if (!checkToken()) {
             navigate('/')
         }
         else{
+            setLocalS(() => {
+                return localStorage.getItem("UserData") ? JSON.parse(localStorage.getItem("UserData")!) : {userId: 0, publisherName: ""}
+                
+            })
             loadUserData();
         }
     }, [])
-
-    const [userId, setUserId] = useState(0);
-    const [publisherName, setPublisherName] = useState("")
-    const [expenseItem, setExpenseItem] = useState<Expense[]>([])
-    // const [userInfo, setUserInfo] = useState<userInfo [] | null>(null)
+    
     
 
     const loadUserData = () => {
         // let userInfos = LoggedInData();
-        let userInfo = JSON.parse(localStorage.getItem("UserData")!)
-        let userInfoId = Number(userInfo.userId);
-        console.log(userInfoId)
-        // setUserInfo(userInfos)
-        console.log("User info:", userInfo);
-        onLogin(userInfo);
-        setUserId(userInfoId);
-        setPublisherName(userInfo.publisherName);
-        console.log(userInfo.userId);
-        console.log(publisherName);
-        console.log(userId)
+        
+        onLogin(localS);
+        
+        fetchData();
+
         // setTimeout(async () => {
             
         //   let userExpenseItems = await GetItemsByUserId(userInfos.userId)
@@ -93,7 +98,7 @@ const ExpenseList = ({onLogin}:ExpenseProp) => {
 
     const [editInput, setEditInput] = useState<Expense>({
         id: 0,
-        userId: userId,
+        userId: localS.userId,
         description: "",
         amount: 0,
         category: "",
@@ -117,6 +122,7 @@ const ExpenseList = ({onLogin}:ExpenseProp) => {
                 setEditInput({
                     ...editInput,
                     id: 0,
+                    userId: localS.userId,
                     description: "",
                     amount: 0,
                     category: "",
@@ -126,8 +132,10 @@ const ExpenseList = ({onLogin}:ExpenseProp) => {
     };
 
     const fetchData = () => {
+        let userInfo = JSON.parse(localStorage.getItem("UserData")!)
+        console.log(localS.userId)
         axios
-            .get(BASE_URL + "Expense/GetItemsByUserId/" + userId)
+            .get(BASE_URL + "Expense/GetItemsByUserId/" + localS.userId)
             .then((response) => {
                 setData(response.data);
             })
@@ -145,14 +153,14 @@ const ExpenseList = ({onLogin}:ExpenseProp) => {
             });
     };
 
-    useEffect(() => {
-        fetchData();
-    }, []);
+    // useEffect(() => {
+    //     fetchData();
+    // }, []);
 
     return (
         <>  
             
-            <ExpenseForm fetchData={fetchData} userId={userId}/>
+            <ExpenseForm fetchData={fetchData}/>
             <br />
             <ExpenseFilter
                 onSelectCategory={(category) => setSelectedCategory(category)}

@@ -74,7 +74,7 @@ const GetLoggedInUser = (username:string) => {
 
 const LoggedInData = () => {
     if(!userData && localStorage.getItem("UserData")){
-        userData = JSON.parse(localStorage.getUser("UserData")!)
+        userData = JSON.parse(localStorage.getItem("UserData")!)
     }
     return userData;
 };
