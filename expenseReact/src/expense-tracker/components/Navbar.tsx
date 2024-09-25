@@ -16,7 +16,7 @@ const NavBar = ({isLoggedIn, setIsLoggedIn, handleLogout, user}:NavProps) => {
     
   return (
     <>
-    <Navbar >
+    <Navbar variant="dark" >
     <Container>
 
 <Navbar.Brand href="#home">Expense Tracker</Navbar.Brand>
