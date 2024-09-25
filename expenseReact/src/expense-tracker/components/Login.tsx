@@ -30,7 +30,7 @@ const Login = () => {
     if (token != null) {
       localStorage.setItem("Token", token);
       // localStorage.setItem("UserData", JSON.stringify(userData));
-      GetLoggedInUser(Username);
+      await GetLoggedInUser(Username);
       navigate('/ExpenseList')
     }
     return userData;

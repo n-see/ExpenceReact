@@ -61,15 +61,12 @@ const login = async (loginUser:User) => {
     
 }
 
-const GetLoggedInUser = (username:string) => {
-    axios
+const GetLoggedInUser = async (username:string) => {
+    let res = await axios 
     .get(BASE_URL + "User/GetUserByUsername/" + username)
-    .then((res) => {
-        let userData = res.data;
+    let userData = res.data;
         console.log(userData)
         localStorage.setItem("UserData", JSON.stringify(userData) )
-    })
-    .catch(error => error.message)
 }
 
 const LoggedInData = () => {
