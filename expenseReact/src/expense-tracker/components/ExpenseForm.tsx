@@ -18,12 +18,13 @@ interface expenseProps {
     expenseClick: () => void;
 }
 
-const ExpenseForm = ({fetchData, userId}:ExpenseProps, {expenseClick}:expenseProps) => {
+const ExpenseForm = ({fetchData}:ExpenseProps, {expenseClick}:expenseProps) => {
     const {register, handleSubmit,  formState:{errors}} = useForm<FormData>({resolver:zodResolver(schema)})
 
+    const userData = JSON.parse(localStorage.getItem("UserData")!)
     const [expense, setExpense] = useState({
         id: 0,
-        userId: userId,
+        userId: userData ? Number(userData.userId) : 0,
         description: "",
         amount:0,
         category:"",
