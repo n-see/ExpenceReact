@@ -65,7 +65,7 @@ const Login = () => {
                 Login
               </Button>
               <p className="mt-3">Don't have an account?</p>
-              <Button variant="primary" onClick={() => ('/CreateAccount')}>
+              <Button variant="primary" onClick={() => navigate('/CreateAccount')}>
                 Create Account
               </Button>
             </Form>
