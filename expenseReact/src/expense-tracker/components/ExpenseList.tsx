@@ -123,9 +123,9 @@ const ExpenseList = ({onLogin}:ExpenseProp) => {
                     ...editInput,
                     id: 0,
                     userId: localS.userId,
-                    description: "",
-                    amount: 0,
-                    category: "",
+                    description: editInput.description,
+                    amount: editInput.amount,
+                    category: editInput.category,
                 });
                 setEditId(null);
             });
@@ -184,7 +184,7 @@ const ExpenseList = ({onLogin}:ExpenseProp) => {
                                     <>
                                         <input
                                             type="text"
-                                            value={editInput.description}
+                                            value={expense.description}
                                             onChange={(e) =>
                                                 setEditInput({
                                                     ...editInput,
@@ -202,7 +202,7 @@ const ExpenseList = ({onLogin}:ExpenseProp) => {
                                     <>
                                         <input
                                             type="text"
-                                            value={editInput.amount}
+                                            value={expense.amount}
                                             onChange={(e) =>
                                                 setEditInput({
                                                     ...editInput,
@@ -225,9 +225,9 @@ const ExpenseList = ({onLogin}:ExpenseProp) => {
                                                 setEditInput({ ...expense, category: e.target.value })
                                             }
                                         >
-                                            <option value="">Select a Category</option>
+                                            <option value={expense.category}>Select a Category</option>
                                             {categories.map((category) => (
-                                                <option key={category} value={category}>
+                                                <option key={category} value={expense.category}>
                                                     {category}
                                                 </option>
                                             ))}
