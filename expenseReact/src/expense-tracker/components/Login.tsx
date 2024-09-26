@@ -3,12 +3,14 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom"
 import { GetLoggedInUser, login } from "../../Services/DataService";
 
+
 const Login = () => {
 
   let navigate = useNavigate();
 
   const [Username, setUsername] = useState('')
   const [Password, setPassword] = useState('')
+  const [isBlank, setIsBlank] = useState(false);
 
   const handleUser = (e: string) => {
     setUsername(e);
@@ -19,6 +21,10 @@ const Login = () => {
   }
 
   const handleSubmit = async () => {
+    if(Username === "" || Password === ""){
+      setIsBlank(true);
+      return;
+    }
     let userData = {
       id: 0,
       username: Username,
@@ -49,6 +55,8 @@ const Login = () => {
               <Form.Group className="mb-3" controlId="Username">
                 <Form.Label>Username</Form.Label>
                 <Form.Control type="text" placeholder="Enter username" onChange={(e) => handleUser(e.target.value)} />
+                {Username === "" && isBlank== true ? <Form.Text className="text-danger"> username cannot be blank</Form.Text>: null}
+
                 {/* <Form.Text className="text-muted">
                                     We'll never share your email with anyone else, unless we are paid a substantial amount of money to sell your data.
                                 </Form.Text> */}
@@ -57,6 +65,7 @@ const Login = () => {
               <Form.Group className="mb-3" controlId="formBasicPassword">
                 <Form.Label>Password</Form.Label>
                 <Form.Control type="password" placeholder="Password" onChange={(e) => handlePassword(e.target.value)} />
+                {Password === '' && isBlank== true ? <Form.Text className="text-danger"> password cannot be blank</Form.Text>: null}
               </Form.Group>
               {/* <Form.Group className="mb-3" controlId="formBasicCheckbox">
                                 <Form.Check type="checkbox" label="Check me out" />

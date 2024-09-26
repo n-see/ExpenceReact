@@ -110,6 +110,7 @@ const ExpenseList = ({onLogin}:ExpenseProp) => {
     };
 
     const handleSave = () => {
+        console.log(editInput)
         axios
             .put(BASE_URL + "Expense/" + editId, editInput)
             .then(() => {
@@ -123,9 +124,10 @@ const ExpenseList = ({onLogin}:ExpenseProp) => {
                     ...editInput,
                     id: 0,
                     userId: localS.userId,
-                    description: editInput.description,
-                    amount: editInput.amount,
-                    category: editInput.category,
+                    description: "",
+                    amount: 0,
+                    category:""
+                    
                 });
                 setEditId(null);
             });
@@ -165,7 +167,9 @@ const ExpenseList = ({onLogin}:ExpenseProp) => {
             <ExpenseFilter
                 onSelectCategory={(category) => setSelectedCategory(category)}
             />
-            <br />
+            <br /> 
+
+            {data.length == 0 ? <p className="text-center text-danger">No Expenses Added</p> :
 
             <table className="table table-dark table-bordered">
                 <thead>
@@ -177,6 +181,7 @@ const ExpenseList = ({onLogin}:ExpenseProp) => {
                     </tr>
                 </thead>
                 <tbody>
+                    
                     {visibleExpense.map((expense) => (
                         <tr key={expense.id}>
                             <td>
@@ -284,6 +289,7 @@ const ExpenseList = ({onLogin}:ExpenseProp) => {
                     </tr>
                 </tfoot>
             </table>
+}
         </>
     );
 };
