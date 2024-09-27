@@ -2,7 +2,6 @@
 import { User } from "../App";
 import { BASE_URL } from "../constant";
 import axios from "axios";
-import { Container, Row, Col, Button, Form } from "react-bootstrap"
 
 //Helper function to check token
 
@@ -43,20 +42,6 @@ const login = async (loginUser:User) => {
     } catch(error) {
         console.log(error)
     }
-
-    // .then((res) => {
-
-        // let data = res.data
-        // outsideData = data.token
-        // localStorage.setItem("Token", data.token)
-        // console.log(localStorage)
-    // }
-    // )
-    // .catch(error => error.message)
-    // .finally(() => {
-
-    //     console.log(outsideData)
-    // })
     return outsideData
     
 }
