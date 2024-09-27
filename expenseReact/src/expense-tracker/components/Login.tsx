@@ -51,7 +51,11 @@ const Login = () => {
               <p className="text-center">Login</p>
               <Form.Group className="mb-3" controlId="Username">
                 <Form.Label>Username</Form.Label>
-                <Form.Control type="text" placeholder="Enter username" onChange={(e) => handleUser(e.target.value)} />
+                <Form.Control type="text" placeholder="Enter username" onChange={(e) => handleUser(e.target.value)} onKeyDown={(e) => {
+                console.log("enter key")
+                if(e.key === "Enter"){
+                  handleSubmit();
+                }}}/>
                 {Username === "" && isBlank== true ? <Form.Text className="text-danger"> username cannot be blank</Form.Text>: null}
               </Form.Group>
 
