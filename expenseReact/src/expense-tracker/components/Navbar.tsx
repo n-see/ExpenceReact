@@ -1,4 +1,4 @@
-import { Nav, Navbar, NavDropdown, Container, Image,  } from "react-bootstrap";
+import { Nav, Navbar, Container  } from "react-bootstrap";
 import { Link } from "react-router-dom";
 
 interface NavProps {
@@ -11,9 +11,8 @@ interface NavProps {
 }
 
 //will need user, isLoggedIn, and setIsLoggedIn
-const NavBar = ({isLoggedIn, setIsLoggedIn, handleLogout, user}:NavProps) => {
-
-    
+const NavBar = ({isLoggedIn, handleLogout, user}:NavProps) => {
+ 
   return (
     <>
     <Navbar variant="dark" >
@@ -37,10 +36,6 @@ const NavBar = ({isLoggedIn, setIsLoggedIn, handleLogout, user}:NavProps) => {
               </Nav>
               
           </Navbar.Collapse>
-  {/* <Text>This is the navbar</Text>
-  <Text as={Link} to={"/ExpenseList"}>Expense List</Text>
-  <Text as={Link} to={"/CreateAccount"}>Create Account</Text>
-  <Text as={Link} to={"/"}>Log In</Text> */}
 </Container>
     </Navbar>
         

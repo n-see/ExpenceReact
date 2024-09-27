@@ -29,12 +29,11 @@ const ExpenseForm = ({fetchData}:ExpenseProps, {expenseClick}:expenseProps) => {
         amount:0,
         category:"",
         });
-    // console.log(errors)
 
     const handleAdd = () => {
         if (expense.description === "" || expense.amount === 0 || expense.category ===""){return} else{
         axios
-        .post(BASE_URL + "Expense/", expense)
+        .post(BASE_URL + "Expense", expense)
         .then((response) => {
             fetchData();
             console.log(response)
@@ -44,8 +43,6 @@ const ExpenseForm = ({fetchData}:ExpenseProps, {expenseClick}:expenseProps) => {
         })
     }
     }
-
-
 
     return (
         <>

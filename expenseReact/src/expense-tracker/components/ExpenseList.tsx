@@ -1,16 +1,13 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { BASE_URL } from "../../constant";
-
-
 import ExpenseForm from "./ExpenseForm";
 import categories from "../categories";
 import ExpenseFilter from "./ExpenseFilter";
-import Navbar from "./Navbar";
 import { useNavigate } from "react-router-dom";
-import { checkToken, GetItemsByUserId, LoggedInData } from "../../Services/DataService";
-import { User } from "../../App";
+import { checkToken } from "../../Services/DataService";
 
+//interfaces/ the layout of how all expense data should look
 export interface Expense {
     id: number;
     userId: number;
@@ -19,14 +16,7 @@ export interface Expense {
     category: string;
 }
 
-interface userInfo {
-    id: number
-    userId: number
-    publisherName: string
-
-}
-
-
+//props
 export interface ExpenseProps {
     fetchData: () => void;
     
@@ -35,25 +25,32 @@ interface ExpenseProp {
     onLogin: (userInfo:any) => void
 }
 
-// interface ExpenseProps {
-//     expenses: Expense [];
-//     onDelete: (id: number) => void
-// }
 
 const ExpenseList = ({onLogin}:ExpenseProp) => {
     let navigate = useNavigate();
 
+    //UseStates
 
-    const [userId, setUserId] = useState(0);
-    const [publisherName, setPublisherName] = useState("")
-    const [expenseItem, setExpenseItem] = useState<Expense[]>([])
-
+    //UseState that holds UserData from LocalStorage
     const [localS, setLocalS] = useState(() => {
-        return localStorage.getItem("UserData") ? JSON.parse(localStorage.getItem("UserData")!) : {userId: 0, publisherName: ""}
-        
+        return localStorage.getItem("UserData") ? JSON.parse(localStorage.getItem("UserData")!) : {userId: 0, publisherName: ""} 
     })
-    // const [userInfo, setUserInfo] = useState<userInfo [] | null>(null)
-    
+    //UseState that holds all fetched data from database
+    const [data, setData] = useState<Expense[]>([]);
+    //UseState that holds category drop down 
+    const [selectedCategory, setSelectedCategory] = useState("");
+    //UseState that holds the id number of the expense to be edited
+    const [editId, setEditId] = useState<number | null>(null);
+    //UseState that holds data that will be edited from expense List
+    const [editInput, setEditInput] = useState<Expense>({
+        id: 0,
+        userId: localS.userId,
+        description: "",
+        amount: 0,
+        category: "",
+    });
+
+//use effects checks if there is a token in the localStorage if not will return to login page
     useEffect(() => {
         if (!checkToken()) {
             navigate('/')
@@ -63,52 +60,24 @@ const ExpenseList = ({onLogin}:ExpenseProp) => {
                 return localStorage.getItem("UserData") ? JSON.parse(localStorage.getItem("UserData")!) : {userId: 0, publisherName: ""}
                 
             })
-            loadUserData();
+            // loadUserData();
+            onLogin(localS);
+        
+        fetchData();
         }
     }, [])
     
-    
-
-    const loadUserData = () => {
-        // let userInfos = LoggedInData();
-        
-        onLogin(localS);
-        
-        fetchData();
-
-        // setTimeout(async () => {
-            
-        //   let userExpenseItems = await GetItemsByUserId(userInfos.userId)
-        //   setExpenseItem(userExpenseItems.data);
-        //   setUserId(userId);
-
-
-        //   console.log("Loaded expense items: ", expenseItem);
-        // },1000)
-    
-    }
-    
-    const [data, setData] = useState<Expense[]>([]);
-    // const [currentData, setCurrentData] = useState<Expense>({} as Expense);
-    const [selectedCategory, setSelectedCategory] = useState("");
-
+    // variable that holds the expenses from the data base that will be filtered
     const visibleExpense = selectedCategory
         ? data.filter((e) => e.category === selectedCategory)
         : data;
 
-    const [editInput, setEditInput] = useState<Expense>({
-        id: 0,
-        userId: localS.userId,
-        description: "",
-        amount: 0,
-        category: "",
-    });
-    const [editId, setEditId] = useState<number | null>(null);
-
-    const setEdit = (id: number) => {
-        setEditId(id);
+    //Function that will sets id for the expense that will be edited 
+    const setEdit = (expense:Expense) => {
+        setEditId(expense.id);
+        setEditInput(expense);
     };
-
+    //function that saves the changes of a single expense to the database
     const handleSave = () => {
         console.log(editInput)
         axios
@@ -122,20 +91,13 @@ const ExpenseList = ({onLogin}:ExpenseProp) => {
             .finally(() => {
                 setEditInput({
                     ...editInput,
-                    id: 0,
-                    userId: localS.userId,
-                    description: "",
-                    amount: 0,
-                    category:""
-                    
+            
                 });
                 setEditId(null);
             });
     };
-
+    //function that pulls all data from the database 
     const fetchData = () => {
-        let userInfo = JSON.parse(localStorage.getItem("UserData")!)
-        console.log(localS.userId)
         axios
             .get(BASE_URL + "Expense/GetItemsByUserId/" + localS.userId)
             .then((response) => {
@@ -145,7 +107,7 @@ const ExpenseList = ({onLogin}:ExpenseProp) => {
                 console.log(error);
             });
     };
-
+    //function that will delete the selected expense from the array and database
     const handleDelete = (id: number) => {
         axios
             .delete(BASE_URL + "Expense/" + id)
@@ -155,22 +117,20 @@ const ExpenseList = ({onLogin}:ExpenseProp) => {
             });
     };
 
-    // useEffect(() => {
-    //     fetchData();
-    // }, []);
-
     return (
         <>  
-            
+            {/* Form Component that allows user to add an expense  */}
             <ExpenseForm fetchData={fetchData}/>
             <br />
+            {/* filter component that will show expenses by category */}
             <ExpenseFilter
                 onSelectCategory={(category) => setSelectedCategory(category)}
             />
             <br /> 
-
+            {/* if there is no data in the data useState a text will appear stating there is no data */}
             {data.length == 0 ? <p className="text-center text-danger">No Expenses Added</p> :
 
+            // Table that will display the expenses
             <table className="table table-dark table-bordered">
                 <thead>
                     <tr>
@@ -181,15 +141,18 @@ const ExpenseList = ({onLogin}:ExpenseProp) => {
                     </tr>
                 </thead>
                 <tbody>
-                    
+                    {/* maps visibleExpense to display all the data that was fetched from the database */}
                     {visibleExpense.map((expense) => (
                         <tr key={expense.id}>
                             <td>
+                                {/* ternary that checks if the editId useState matches the expense's id 
+                                    * if it matches it will display an input field to allow the user to edit the expense
+                                        - if they don't match, it will just return the non-editable expense as text. */}
                                 {editId == expense.id ? (
                                     <>
                                         <input
                                             type="text"
-                                            value={expense.description}
+                                            value={editInput.description}
                                             onChange={(e) =>
                                                 setEditInput({
                                                     ...editInput,
@@ -203,11 +166,13 @@ const ExpenseList = ({onLogin}:ExpenseProp) => {
                                 )}
                             </td>
                             <td>
+                                {/* same ternary as above but with the amount instead */}
                                 {editId == expense.id ? (
                                     <>
                                         <input
                                             type="text"
-                                            value={expense.amount}
+                                            
+                                            value={editInput.amount}
                                             onChange={(e) =>
                                                 setEditInput({
                                                     ...editInput,
@@ -220,6 +185,7 @@ const ExpenseList = ({onLogin}:ExpenseProp) => {
                                     expense.amount
                                 )}
                             </td>
+                            {/* same ternary as above but with the category instead */}
                             <td>
                                 {editId == expense.id ? (
                                     <>
@@ -230,9 +196,9 @@ const ExpenseList = ({onLogin}:ExpenseProp) => {
                                                 setEditInput({ ...expense, category: e.target.value })
                                             }
                                         >
-                                            <option value={expense.category}>Select a Category</option>
+                                            <option value={editInput.category}>Select a Category</option>
                                             {categories.map((category) => (
-                                                <option key={category} value={expense.category}>
+                                                <option key={category} value={category}>
                                                     {category}
                                                 </option>
                                             ))}
@@ -242,6 +208,7 @@ const ExpenseList = ({onLogin}:ExpenseProp) => {
                                     expense.category
                                 )}
                             </td>
+                            {/* holds the delete button and an edit button */}
                             <td>
                                 <button
                                     className="btn btn-outline-danger m-2"
@@ -251,10 +218,11 @@ const ExpenseList = ({onLogin}:ExpenseProp) => {
                                 </button>
                                 <button
                                     className="btn btn-outline-warning "
-                                    onClick={() => setEdit(expense.id)}
+                                    onClick={() => setEdit(expense)}
                                 >
                                     Edit
                                 </button>
+                                {/* if the edit button is clicked it will set the id to the editId and this will cause the ternary to display and save button and a cancel button within the expense next to the delete and save button */}
                                 {editId == expense.id ? (
                                     <>
                                         <button
@@ -280,6 +248,7 @@ const ExpenseList = ({onLogin}:ExpenseProp) => {
                     <tr>
                         <td>Total</td>
                         <td>
+                            {/* this will take the amount section of the expenses and will add them together to display a total */}
                             {visibleExpense
                                 .reduce((acc, expense) => expense.amount + acc, 0)
                                 .toFixed(2)}

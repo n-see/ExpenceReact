@@ -16,7 +16,7 @@ type FormData = z.infer<typeof schema>
 
 
 const CreateAccount = () => {
-    const {register, handleSubmit,  formState:{errors}} = useForm<FormData>({resolver:zodResolver(schema)})
+    const {register, handleSubmit} = useForm<FormData>({resolver:zodResolver(schema)})
 
 
     let navigate = useNavigate();
@@ -50,48 +50,39 @@ const CreateAccount = () => {
     }
     }
 
-  return (
-    <>
-        <Container>
-                <Row>
-                    <Col className="form-container d-flex justify-content-center">
-                        {/* <h1>Account Page</h1> */}
+    return (
+        <>
+            <Container>
+                    <Row>
+                        <Col className="form-container d-flex justify-content-center">
 
-                        <Form onSubmit={()=> handleSubmit}>
-                            <p className="text-center">Create an Account</p>
-                            <Form.Group className="mb-3" controlId="Username">
-                                <Form.Label>Username</Form.Label>
-                                <Form.Control {...register('username')} type="text" placeholder="Enter username" onChange={(e) => handleUser(e.target.value)}/>
-                                {/* {errors.username && <Form.Text className="text-danger">{errors.username.message}</Form.Text>} */}
-                                {Username === "" && isBlank== true ? <Form.Text className="text-danger"> username cannot be blank</Form.Text>: null}
-                                {/* <Form.Text className="text-muted">
-                                    We'll never share your email with anyone else, unless we are paid a substantial amount of money to sell your data.
-                                </Form.Text> */}
-                            </Form.Group>
 
-                            <Form.Group className="mb-3" controlId="formBasicPassword">
-                                <Form.Label>Password</Form.Label>
-                                <Form.Control {...register('password')} type="password" placeholder="Enter Password"  onChange={(e) => handlePassword(e.target.value)}/>
-                                {/* {errors.password && <Form.Text className="text-danger">{errors.password.message}</Form.Text>} */}
-                                {Password === "" && isBlank== true ? <Form.Text className="text-danger"> password cannot be blank</Form.Text>: null}
-                            </Form.Group>
-                            {/* <Form.Group className="mb-3" controlId="formBasicCheckbox">
-                                <Form.Check type="checkbox" label="Check me out" />
-                            </Form.Group> */}
-                            <Button variant="primary" onClick={handleSubmits}>
-                                Submit
-                            </Button>
-                            <p className="mt-3">Already Have an Account?</p>
-                            <Button variant="primary" onClick={() => navigate('/')}>
-                                Log In
-                            </Button>
-                        </Form>
+                            <Form onSubmit={()=> handleSubmit}>
+                                <p className="text-center">Create an Account</p>
+                                <Form.Group className="mb-3" controlId="Username">
+                                    <Form.Label>Username</Form.Label>
+                                    <Form.Control {...register('username')} type="text" placeholder="Enter username" onChange={(e) => handleUser(e.target.value)}/>
+                                    {Username === "" && isBlank== true ? <Form.Text className="text-danger"> username cannot be blank</Form.Text>: null}
+                                </Form.Group>
 
-                    </Col>
-                </Row>
-            </Container>
-    </>
-  )
+                                <Form.Group className="mb-3" controlId="formBasicPassword">
+                                    <Form.Label>Password</Form.Label>
+                                    <Form.Control {...register('password')} type="password" placeholder="Enter Password"  onChange={(e) => handlePassword(e.target.value)}/>
+                                    {Password === "" && isBlank== true ? <Form.Text className="text-danger"> password cannot be blank</Form.Text>: null}
+                                </Form.Group>
+                                <Button variant="primary" onClick={handleSubmits}>
+                                    Submit
+                                </Button>
+                                <p className="mt-3">Already Have an Account?</p>
+                                <Button variant="primary" onClick={() => navigate('/')}>
+                                    Log In
+                                </Button>
+                            </Form>
+                        </Col>
+                    </Row>
+                </Container>
+        </>
+    )
 }
 
 export default CreateAccount
