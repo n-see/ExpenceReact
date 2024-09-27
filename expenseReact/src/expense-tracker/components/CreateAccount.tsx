@@ -55,19 +55,25 @@ const CreateAccount = () => {
             <Container>
                     <Row>
                         <Col className="form-container d-flex justify-content-center">
-
-
                             <Form onSubmit={()=> handleSubmit}>
                                 <p className="text-center">Create an Account</p>
                                 <Form.Group className="mb-3" controlId="Username">
                                     <Form.Label>Username</Form.Label>
-                                    <Form.Control {...register('username')} type="text" placeholder="Enter username" onChange={(e) => handleUser(e.target.value)}/>
+                                    <Form.Control {...register('username')} type="text" placeholder="Enter username" onChange={(e) => handleUser(e.target.value)} onKeyDown={(e) => {
+                                    console.log("enter key")
+                                    if(e.key === "Enter"){
+                                    handleSubmits();
+                                    }}}/>
                                     {Username === "" && isBlank== true ? <Form.Text className="text-danger"> username cannot be blank</Form.Text>: null}
                                 </Form.Group>
 
                                 <Form.Group className="mb-3" controlId="formBasicPassword">
                                     <Form.Label>Password</Form.Label>
-                                    <Form.Control {...register('password')} type="password" placeholder="Enter Password"  onChange={(e) => handlePassword(e.target.value)}/>
+                                    <Form.Control {...register('password')} type="password" placeholder="Enter Password"  onChange={(e) => handlePassword(e.target.value)} onKeyDown={(e) => {
+                                    console.log("enter key")
+                                    if(e.key === "Enter"){
+                                    handleSubmits();
+                                    }}}/>
                                     {Password === "" && isBlank== true ? <Form.Text className="text-danger"> password cannot be blank</Form.Text>: null}
                                 </Form.Group>
                                 <Button variant="primary" onClick={handleSubmits}>
