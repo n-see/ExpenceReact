@@ -57,10 +57,15 @@ const Login = () => {
 
               <Form.Group className="mb-3" controlId="formBasicPassword">
                 <Form.Label>Password</Form.Label>
-                <Form.Control type="password" placeholder="Password" onChange={(e) => handlePassword(e.target.value)} />
+                <Form.Control type="password" placeholder="Password" onChange={(e) => handlePassword(e.target.value)} onKeyDown={(e) => {
+                console.log("enter key")
+                if(e.key === "Enter"){
+                  handleSubmit();
+                }
+              }} />
                 {Password === '' && isBlank== true ? <Form.Text className="text-danger"> password cannot be blank</Form.Text>: null}
               </Form.Group>
-              <Button variant="primary" onClick={handleSubmit}>
+              <Button variant="primary" onClick={handleSubmit} >
                 Login
               </Button>
               <p className="mt-3">Don't have an account?</p>
